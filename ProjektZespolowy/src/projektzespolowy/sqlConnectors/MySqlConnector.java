@@ -56,7 +56,7 @@ public class MySqlConnector extends SqlConnector{
     }
 
     public boolean createTables() {
-        return StaticMethods.createTables(stat);
+        return StaticMethods.createTablesMySQL(stat);
     }
     
     public boolean insertBuyer() {

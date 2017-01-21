@@ -23,13 +23,34 @@ public class StaticMethods {
     private StaticMethods(){}
     
     
-        public static boolean createTables(Statement stat)
+        public static boolean createTablesSQLLite(Statement stat)
         {           
         String createBuyer = "CREATE TABLE IF NOT EXISTS buyers (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
         String createSeller = "CREATE TABLE IF NOT EXISTS sellers (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
         String createHeader = "CREATE TABLE IF NOT EXISTS headers (id INTEGER PRIMARY KEY AUTOINCREMENT, InvoiceNumber varchar(255), InvoiceBruttoPrice DOUBLE, InvoiceNettoPrice DOUBLE)";
         String createInvoice = "CREATE TABLE IF NOT EXISTS invoices (id INTEGER PRIMARY KEY AUTOINCREMENT, buyerID INTEGER REFERENCES buyers(id) ,sealerID INTEGER REFERENCES sellers(id),headerID INTEGER REFERENCES heads(id))";
         String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Price DOUBLE, Ammount DOUBLE, InvokeID INTEGER REFERENCES invoices(id))";
+        try {
+            stat.execute(createBuyer);
+            stat.execute(createSeller);
+            stat.execute(createHeader);
+            stat.execute(createInvoice);
+            stat.execute(createIncoiceItem);
+        } catch (SQLException e) {
+            System.err.println("Blad przy tworzeniu tabeli");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+        }
+        
+        public static boolean createTablesMySQL(Statement stat)
+        {           
+        String createBuyer = "CREATE TABLE IF NOT EXISTS buyers (id Int PRIMARY KEY AUTO_INCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
+        String createSeller = "CREATE TABLE IF NOT EXISTS sellers (id INTEGER PRIMARY KEY AUTO_INCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
+        String createHeader = "CREATE TABLE IF NOT EXISTS headers (id INTEGER PRIMARY KEY AUTO_INCREMENT, InvoiceNumber varchar(255), InvoiceBruttoPrice DOUBLE, InvoiceNettoPrice DOUBLE)";
+        String createInvoice = "CREATE TABLE IF NOT EXISTS invoices (id INTEGER PRIMARY KEY AUTO_INCREMENT, buyerID INTEGER REFERENCES buyers(id) ,sealerID INTEGER REFERENCES sellers(id),headerID INTEGER REFERENCES heads(id))";
+        String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id INTEGER PRIMARY KEY AUTO_INCREMENT, Name varchar(255), Price DOUBLE, Ammount DOUBLE, InvokeID INTEGER REFERENCES invoices(id))";
         try {
             stat.execute(createBuyer);
             stat.execute(createSeller);

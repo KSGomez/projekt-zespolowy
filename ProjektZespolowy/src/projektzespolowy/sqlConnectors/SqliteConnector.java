@@ -62,7 +62,7 @@ public class SqliteConnector extends SqlConnector{
     }
 
     public boolean createTables() {
-        return StaticMethods.createTables(stat);
+        return StaticMethods.createTablesSQLLite(stat);
     }
     
     public boolean insertBuyer() {
