@@ -6,9 +6,13 @@
 package projektzespolowy;
 
 import java.util.List;
-import projektzespolowy.sqlConnectors.SqliteConnector;
+import projektzespolowy.Models.Buyer;
+import projektzespolowy.Models.Header;
+import projektzespolowy.sqlConnectors.*;
 
 import projektzespolowy.Models.Invoice;
+import projektzespolowy.Models.InvoiceItem;
+import projektzespolowy.Models.Seller;
 
 /**
  *
@@ -22,20 +26,25 @@ public class ProjektZespolowy {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        SqliteConnector sLiteCon = new SqliteConnector();
+        Invoice newInvoice = new Invoice(0, 0, 0, 0, null, null, null);
+        newInvoice.nabywca = new Buyer(0,"Janusz", "Januszowa", "Januszow", "05-111", "2190877120"); 
+        newInvoice.sprzedawca =new Seller(0,"Wiaczeslaw", "Momotowa", "Momotow", "05-112", "2190877121"); 
+        newInvoice.naglowek = new Header(0, "FV/111/11", 1000, 1200);
+        newInvoice.invoiceItems.add(new InvoiceItem(0, 0, "Testowy produkt", 1000, 10));
+               
         
-        sLiteCon.insertBuyer("Janusz", "Januszowa", "Januszow", "05-111", "2190877120");
-        sLiteCon.insertSeller("Wiaczeslaw", "Momotowa", "Momotow", "05-112", "2190877121");
-        sLiteCon.insertHeader("FV/111/11", 1000, 1200);
-        sLiteCon.insertInvoice(1, 1, 1);
-        
-        List<Invoice> faktury = sLiteCon.selectFaktury();
-        
-        System.out.println("Lista faktur: ");
-        for(Invoice c: faktury)
-            System.out.println(c);
-        
+        //SQLLITE
+        SqliteConnector sLiteCon = new SqliteConnector("SqlLite", newInvoice);        
+        newInvoice = sLiteCon.getFaktura();  
+        System.out.println(newInvoice);        
         sLiteCon.closeConnection();
+        
+        //MySQL
+        MySqlConnector sMysqlConn = new MySqlConnector("MySql", newInvoice);        
+        newInvoice = sMysqlConn.getFaktura();  
+        System.out.println(newInvoice);        
+        sLiteCon.closeConnection();
+        
     }
     
 }

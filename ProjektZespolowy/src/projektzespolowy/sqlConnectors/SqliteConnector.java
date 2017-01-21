@@ -24,7 +24,7 @@ import projektzespolowy.Models.Invoice;
 import projektzespolowy.Models.InvoiceItem;
 import projektzespolowy.Models.Seller;
 
-public class SqliteConnector {
+public class SqliteConnector extends SqlConnector{
 
     public static final String DRIVER = "org.sqlite.JDBC";
     public static final String DB_URL = "jdbc:sqlite:testDB.db";
@@ -33,7 +33,8 @@ public class SqliteConnector {
     //pozwala on na wykonywanie zapytań na podstawie zdefiniowanych Stringów
     private Statement stat;
 
-    public SqliteConnector() {
+    public SqliteConnector(String databaseType, Invoice object) {
+            super(databaseType, object);
         try {
             //zaladowanie sterownika do systemu
             Class.forName(SqliteConnector.DRIVER);
@@ -51,131 +52,48 @@ public class SqliteConnector {
         }
 
         createTables();
+        insertBuyer();
+        insertSeller();
+        insertHeader();
+        for(int i = 0; i < operationObject.invoiceItems.size(); i++)
+        {
+            insertInvoiceItem(i); 
+        }
     }
 
     public boolean createTables() {
-        String createBuyer = "CREATE TABLE IF NOT EXISTS buyers (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
-        String createSeller = "CREATE TABLE IF NOT EXISTS sellers (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
-        String createHeader = "CREATE TABLE IF NOT EXISTS headers (id INTEGER PRIMARY KEY AUTOINCREMENT, InvoiceNumber varchar(255), InvoiceBruttoPrice DOUBLE, InvoiceNettoPrice DOUBLE)";
-        String createInvoice = "CREATE TABLE IF NOT EXISTS invoices (id INTEGER PRIMARY KEY AUTOINCREMENT, buyerID INTEGER REFERENCES buyers(id) ,sealerID INTEGER REFERENCES sellers(id),headerID INTEGER REFERENCES heads(id))";
-        String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id INTEGER PRIMARY KEY AUTOINCREMENT, Name varchar(255), Price DOUBLE, Ammount DOUBLE, InvokeID INTEGER REFERENCES invoices(id))";
-        try {
-            stat.execute(createBuyer);
-            stat.execute(createSeller);
-            stat.execute(createHeader);
-            stat.execute(createInvoice);
-            stat.execute(createIncoiceItem);
-        } catch (SQLException e) {
-            System.err.println("Blad przy tworzeniu tabeli");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+        return StaticMethods.createTables(stat);
     }
     
-    public boolean insertBuyer(String Name, String Street, String City, String PostalCode,String NIP) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into buyers values (NULL, ?, ?, ?, ?, ?);");
-            prepStmt.setString(1, Name);
-            prepStmt.setString(2, Street);
-            prepStmt.setString(3, City);
-            prepStmt.setString(4, PostalCode);
-            prepStmt.setString(5, NIP);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Blad przy wstawianiu czytelnika");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public boolean insertBuyer() {
+        return StaticMethods.insertBuyer(operationObject.nabywca, conn); 
     }
     
-    public boolean insertSeller(String Name, String Street, String City, String PostalCode,String NIP) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into sellers values (NULL, ?, ?, ?, ?, ?);");
-            prepStmt.setString(1, Name);
-            prepStmt.setString(2, Street);
-            prepStmt.setString(3, City);
-            prepStmt.setString(4, PostalCode);
-            prepStmt.setString(5, NIP);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Blad przy wstawianiu czytelnika");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public boolean insertSeller() {
+            return StaticMethods.insertSeller(operationObject.sprzedawca, conn); 
     }
     
-    public boolean insertHeader(String InvoiceNumber, double InvoiceBruttoPrice, double InvoiceNettoPrice) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into headers values (NULL, ?, ?, ?);");
-            prepStmt.setString(1, InvoiceNumber);
-            prepStmt.setDouble(2, InvoiceBruttoPrice);
-            prepStmt.setDouble(3, InvoiceNettoPrice);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Blad przy wstawianiu czytelnika");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public boolean insertHeader() {
+            return StaticMethods.insertHeader(operationObject.naglowek, conn);
     }
     
-    public boolean insertInvoice(int buyerID, int headerID, int sealerID) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into invoices values (NULL, ?, ?, ?);");
-            prepStmt.setInt(1, buyerID);
-            prepStmt.setInt(2, headerID);
-            prepStmt.setInt(3, sealerID);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Blad przy wstawianiu czytelnika");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public boolean insertInvoice() {
+            return StaticMethods.insertInvoice(operationObject, conn);
     }
     
-    public boolean insertInvoiceItem(int InvokeID, String Name, double Price, double Ammount) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into invoices values (NULL, ?, ?, ?, ?);");
-            prepStmt.setInt(1, InvokeID);
-            prepStmt.setString(2, Name);
-            prepStmt.setDouble(3, Price);
-            prepStmt.setDouble(4, Ammount);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Blad przy wstawianiu czytelnika");
-            e.printStackTrace();
-            return false;
-        }
-        return true;
+    public boolean insertInvoiceItem(int i) {
+            return StaticMethods.insertInvoiceItem(operationObject.invoiceItems.get(i), conn);
     }
     
     public List<Invoice> selectFaktury() {
-        List<Invoice> faktury = new LinkedList<Invoice>();
-        try {
-            ResultSet result = stat.executeQuery("SELECT * FROM invoices");
-            int id;
-            int buyerID, headerID, sealerID;
-            while(result.next()) {
-                id = result.getInt("id");
-                buyerID = result.getInt("buyerID");
-                headerID = result.getInt("headerID");
-                sealerID = result.getInt("sealerID");
-                faktury.add(new Invoice(id, buyerID, headerID, sealerID));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return faktury;
+            return StaticMethods.selectFaktury(stat);
+    }
+    
+    public Invoice getFaktura()
+    {
+        InvoiceItem nowy = new InvoiceItem(0, 0, DRIVER, 0, 1);
+        operationObject.invoiceItems.add(nowy);
+        return operationObject;
     }
 
     public void closeConnection() {

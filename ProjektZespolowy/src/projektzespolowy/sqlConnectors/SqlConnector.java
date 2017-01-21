@@ -13,8 +13,8 @@ import projektzespolowy.Models.*;
 public abstract class SqlConnector {
     
     //Zminna przechowująca rodzaj bazy danych (Oracle, MSsql, MySql itp.) potrzebne do logowania zmian
-    private String databaseType; 
-    private Invoice operationObject; 
+    public String databaseType; 
+    public Invoice operationObject; 
     
     public SqlConnector(String databaseType, Invoice object)
     {
