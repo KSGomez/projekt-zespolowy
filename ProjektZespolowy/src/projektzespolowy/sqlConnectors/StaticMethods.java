@@ -64,11 +64,31 @@ public class StaticMethods {
         }
         return true;
         }
+        public static boolean createTablesPostgreSql(Statement stat)
+        {           
+        String createBuyer = "CREATE TABLE IF NOT EXISTS buyers (id SERIAL PRIMARY KEY , Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
+        String createSeller = "CREATE TABLE IF NOT EXISTS sellers (id SERIAL PRIMARY KEY, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
+        String createHeader = "CREATE TABLE IF NOT EXISTS headers (id SERIAL PRIMARY KEY, InvoiceNumber varchar(255), InvoiceBruttoPrice REAL, InvoiceNettoPrice REAL)";
+        String createInvoice = "CREATE TABLE IF NOT EXISTS invoices (id SERIAL PRIMARY KEY, buyerID INTEGER REFERENCES buyers(id) ,sealerID INTEGER REFERENCES sellers(id),headerID INTEGER REFERENCES headers(id))";
+        String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id SERIAL PRIMARY KEY, Name varchar(255), Price REAL, Ammount REAL, InvokeID INTEGER REFERENCES invoices(id))";
+        try {
+            stat.execute(createBuyer);
+            stat.execute(createSeller);
+            stat.execute(createHeader);
+            stat.execute(createInvoice);
+            stat.execute(createIncoiceItem);
+        } catch (SQLException e) {
+            System.err.println("Blad przy tworzeniu tabeli");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+        }
         
         public static boolean insertBuyer(Buyer buyer, Connection conn) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into buyers values (NULL, ?, ?, ?, ?, ?);");
+                    "INSERT INTO buyers (Name, Street, City, PostalCode, NIP) VALUES (?, ?, ?, ?, ?);");
             prepStmt.setString(1, buyer.Name);
             prepStmt.setString(2, buyer.Street);
             prepStmt.setString(3, buyer.City);
