@@ -64,6 +64,7 @@ public class StaticMethods {
         }
         return true;
         }
+        
         public static boolean createTablesPostgreSql(Statement stat)
         {           
         String createBuyer = "CREATE TABLE IF NOT EXISTS buyers (id SERIAL PRIMARY KEY , Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
