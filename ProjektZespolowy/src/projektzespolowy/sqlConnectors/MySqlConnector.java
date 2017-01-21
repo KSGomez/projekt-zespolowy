@@ -85,7 +85,7 @@ public class MySqlConnector extends SqlConnector{
     
     public Invoice getFaktura()
     {
-        InvoiceItem nowy = new InvoiceItem(0, 0, DRIVER, 0, 1);
+        InvoiceItem nowy = new InvoiceItem(0, DRIVER, 0, 1, 0);
         operationObject.invoiceItems.add(nowy);
         return operationObject;
     }

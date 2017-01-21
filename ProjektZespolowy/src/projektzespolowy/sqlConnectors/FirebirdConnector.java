@@ -58,7 +58,7 @@ public class FirebirdConnector extends SqlConnector {
     }
 
     public boolean createTables() {
-        return StaticMethods.createTablesFirebird(stat);
+        return StaticMethods.createTablesMySQL(stat);
     }
     
     public boolean insertBuyer() {
@@ -87,7 +87,7 @@ public class FirebirdConnector extends SqlConnector {
     
     public Invoice getFaktura()
     {
-        InvoiceItem nowy = new InvoiceItem(0, 0, DRIVER, 0, 1);
+        InvoiceItem nowy = new InvoiceItem(0,DRIVER, 0, 1, 0);
         operationObject.invoiceItems.add(nowy);
         return operationObject;
     }

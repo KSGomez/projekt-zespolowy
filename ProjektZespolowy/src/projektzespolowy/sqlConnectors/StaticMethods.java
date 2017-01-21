@@ -107,7 +107,7 @@ public class StaticMethods {
             public static boolean insertSeller(Seller seller, Connection conn) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into sellers values (NULL, ?, ?, ?, ?, ?);");
+                    "INSERT INTO sellers (Name, Street, City, PostalCode, NIP) VALUES (?, ?, ?, ?, ?);");
             prepStmt.setString(1, seller.Name);
             prepStmt.setString(2, seller.Street);
             prepStmt.setString(3, seller.City);
@@ -125,7 +125,7 @@ public class StaticMethods {
                 public static boolean insertHeader(Header header, Connection conn) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into headers values (NULL, ?, ?, ?);");
+                    "INSERT INTO headers (InvoiceNumber, InvoiceBruttoPrice, InvoiceNettoPrice) VALUES ( ?, ?, ?);");
             prepStmt.setString(1, header.InvoiceNumber);
             prepStmt.setDouble(2, header.InvoiceBruttoPrice);
             prepStmt.setDouble(3, header.InvoiceNettoPrice);
@@ -141,7 +141,7 @@ public class StaticMethods {
     public static boolean insertInvoice(Invoice invoice, Connection conn) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into invoices values (NULL, ?, ?, ?);");
+                    "INSERT INTO invoices (buyerID, sealerID, headerID) VALUES ( ?, ?, ?);");
             prepStmt.setInt(1, invoice.buyerID);
             prepStmt.setInt(2, invoice.headerID);
             prepStmt.setInt(3, invoice.SellerID);
@@ -157,11 +157,11 @@ public class StaticMethods {
     public static boolean insertInvoiceItem(InvoiceItem item, Connection conn) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into invoiceItems values (NULL, ?, ?, ?, ?);");
-            prepStmt.setInt(1, item.InvokeID);
-            prepStmt.setString(2, item.Name);
-            prepStmt.setDouble(3, item.Price);
-            prepStmt.setDouble(4, item.Ammount);
+                    "INSERT INTO invoiceItems (Name, Price, Ammount, InvokeID) VALUES ( ?, ?, ?, ?);");
+            prepStmt.setString(1, item.Name);
+            prepStmt.setDouble(2, item.Price);
+            prepStmt.setDouble(3, item.Ammount);
+            prepStmt.setInt(4, item.InvokeID);
             prepStmt.execute();
         } catch (SQLException e) {
             System.err.println("Blad przy wstawianiu czytelnika");
