@@ -60,7 +60,7 @@ public class InvoiceItem {
     public InvoiceItem() {
     }
 
-    public InvoiceItem(int id, int InvokeID, String Name, double Price, double Ammount) {
+    public InvoiceItem(int id, String Name, double Price, double Ammount,int InvokeID) {
         this.id = id;
         this.InvokeID = InvokeID;
         this.Name = Name;
