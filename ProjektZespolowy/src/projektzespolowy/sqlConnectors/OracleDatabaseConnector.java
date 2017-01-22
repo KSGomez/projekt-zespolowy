@@ -19,7 +19,7 @@ import projektzespolowy.Models.InvoiceItem;
  */
 public class OracleDatabaseConnector extends SqlConnector {
       public static final String DRIVER = "org.ojdbc6.JDBC";
-    public static final String DB_URL = "jdbc:ojdbc6:testDB.db";
+    public static final String DB_URL = "jdbc:ojdbc6:thin:@192.168.40.1:8080:oracl";
 
     private Connection conn;
     //pozwala on na wykonywanie zapytań na podstawie zdefiniowanych Stringów
@@ -36,7 +36,7 @@ public class OracleDatabaseConnector extends SqlConnector {
         }
 
         try {
-            conn = DriverManager.getConnection(DB_URL);
+            conn = DriverManager.getConnection(DB_URL,"system","oracle");
             stat = conn.createStatement();
         } catch (SQLException e) {
             System.err.println("Problem z otwarciem polaczenia");
