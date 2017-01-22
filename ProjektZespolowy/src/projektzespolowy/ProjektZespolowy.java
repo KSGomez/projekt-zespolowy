@@ -32,24 +32,25 @@ public class ProjektZespolowy {
         newInvoice.naglowek = new Header(0, "FV/111/11", 1000, 1200);
         newInvoice.invoiceItems.add(new InvoiceItem(0, "Testowy produkt", 1000, 10, 0));
                
-        /*
+        
         //SQLLITE
         SqliteConnector sLiteCon = new SqliteConnector("SqlLite", newInvoice);        
         newInvoice = sLiteCon.getFaktura();  
         System.out.println(newInvoice);        
         sLiteCon.closeConnection();
-        
+/*
         //MySQL
         MySqlConnector sMysqlConn = new MySqlConnector("MySql", newInvoice);        
         newInvoice = sMysqlConn.getFaktura();  
         System.out.println(newInvoice);        
-        sLiteCon.closeConnection();
-*/
+        sMysqlConn.closeConnection();
+
         //PostgreSQL
         PostgreSqlConnector sPostgreSQL = new PostgreSqlConnector("PostgreSql", newInvoice);        
         newInvoice = sPostgreSQL.getFaktura();  
         System.out.println(newInvoice);        
         sPostgreSQL.closeConnection();
+*/
         
         
     }
