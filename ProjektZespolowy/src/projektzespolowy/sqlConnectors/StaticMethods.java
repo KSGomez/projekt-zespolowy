@@ -71,7 +71,7 @@ public class StaticMethods {
         String createSeller = "CREATE TABLE IF NOT EXISTS sellers (id SERIAL PRIMARY KEY, Name varchar(255), Street varchar(255), City varchar(255), PostalCode varchar(255), NIP varchar(255))";
         String createHeader = "CREATE TABLE IF NOT EXISTS headers (id SERIAL PRIMARY KEY, InvoiceNumber varchar(255), InvoiceBruttoPrice REAL, InvoiceNettoPrice REAL)";
         String createInvoice = "CREATE TABLE IF NOT EXISTS invoices (id SERIAL PRIMARY KEY, buyerID INTEGER REFERENCES buyers(id) ,sealerID INTEGER REFERENCES sellers(id),headerID INTEGER REFERENCES headers(id))";
-        String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id SERIAL PRIMARY KEY, Name varchar(255), Price REAL, Ammount REAL, InvokeID INTEGER REFERENCES invoices(id))";
+        String createIncoiceItem = "CREATE TABLE IF NOT EXISTS invoiceItems (id SERIAL PRIMARY KEY, Name varchar(255), Price REAL, Ammount REAL, InvokeID INTEGER)";
         try {
             stat.execute(createBuyer);
             stat.execute(createSeller);
@@ -161,7 +161,7 @@ public class StaticMethods {
             prepStmt.setString(1, item.Name);
             prepStmt.setDouble(2, item.Price);
             prepStmt.setDouble(3, item.Ammount);
-            prepStmt.setInt(4, item.InvokeID);
+            prepStmt.setInt(4, item.InvokeID+1);
             prepStmt.execute();
         } catch (SQLException e) {
             System.err.println("Blad przy wstawianiu czytelnika");
