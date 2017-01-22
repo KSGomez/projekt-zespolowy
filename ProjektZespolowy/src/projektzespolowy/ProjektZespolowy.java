@@ -26,11 +26,11 @@ public class ProjektZespolowy {
     
     public static void main(String[] args) {
         // TODO code application logic here
-        Invoice newInvoice = new Invoice(0, 0, 0, 0, null, null, null);
-        newInvoice.nabywca = new Buyer(0,"Janusz", "Januszowa", "Januszow", "05-111", "2190877120"); 
-        newInvoice.sprzedawca =new Seller(0,"Wiaczeslaw", "Momotowa", "Momotow", "05-112", "2190877121"); 
-        newInvoice.naglowek = new Header(0, "FV/111/11", 1000, 1200);
-        newInvoice.invoiceItems.add(new InvoiceItem(0, "Testowy produkt", 1000, 10, 0));
+        Invoice newInvoice = new Invoice(1, 1, 1, 1, null, null, null);
+        newInvoice.nabywca = new Buyer(1,"Janusz", "Januszowa", "Januszow", "05-111", "2190877120"); 
+        newInvoice.sprzedawca =new Seller(1,"Wiaczeslaw", "Momotowa", "Momotow", "05-112", "2190877121"); 
+        newInvoice.naglowek = new Header(1, "FV/111/11", 1000, 1200);
+        newInvoice.invoiceItems.add(new InvoiceItem(1, "Testowy produkt", 1000, 10, 0));
                
         
         //SQLLITE
