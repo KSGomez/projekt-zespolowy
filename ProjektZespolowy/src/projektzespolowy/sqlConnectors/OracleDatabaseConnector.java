@@ -18,7 +18,7 @@ import projektzespolowy.Models.InvoiceItem;
  * @author Adrian
  */
 public class OracleDatabaseConnector extends SqlConnector {
-      public static final String DRIVER = "org.ojdbc6.JDBC";
+      public static final String DRIVER = "oracle.jdbc.OracleDriver";
     public static final String DB_URL = "jdbc:ojdbc6:thin:@192.168.40.1:8080:oracl";
 
     private Connection conn;
